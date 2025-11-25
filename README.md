@@ -618,26 +618,11 @@ git push origin feature/your-feature
 
 ---
 
-## 📝 License
-
-Project ini open source dan tersedia under MIT License.
-
----
-
 ## 👥 Author
 
 **Muhammad Khosyi Syehab**  
-- Email: khosyisyehab@gmail.com
+- Email: syehabkhosyi@gmail.com
 - GitHub: [@KhosySyehab](https://github.com/KhosySyehab)
-
----
-
-## 📞 Support
-
-Jika ada pertanyaan atau issue, silakan:
-1. Check existing issues di GitHub
-2. Create new issue dengan detail yang jelas
-3. Contact author via email
 
 ---
 
@@ -651,7 +636,3 @@ Jika ada pertanyaan atau issue, silakan:
 - [ ] Multi-language support
 - [ ] Admin analytics dashboard
 - [ ] Community badges & rewards
-
----
-
-**Made with ❤️ for community problem-solving**
