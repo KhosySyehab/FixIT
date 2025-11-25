@@ -22,33 +22,44 @@ export default function Dashboard() {
       const name = localStorage.getItem('userName');
       if (name) setUserName(name);
 
-      // Hardcoded test data for now
-      const testReports = [
-        {
-          _id: '1',
-          title: 'Jalan Rusak di Jl. Sudirman',
-          description: 'Ada lubang besar di persilangan Jl. Sudirman',
-          category: 'road',
-          status: 'progress',
-          severity: 4,
-          votes: 15,
-          latitude: -6.2,
-          longitude: 106.8
-        },
-        {
-          _id: '2',
-          title: 'Lampu Jalan Mati',
-          description: 'Lampu jalan tidak menyala di area Blok M',
-          category: 'street-light',
-          status: 'pending',
-          severity: 2,
-          votes: 8,
-          latitude: -6.25,
-          longitude: 106.82
+      // Try to fetch from API, fallback to test data
+      try {
+        const reportsRes = await api.get('/report');
+        if (reportsRes.data && Array.isArray(reportsRes.data)) {
+          setReports(reportsRes.data);
+        } else {
+          throw new Error('No data');
         }
-      ];
-
-      setReports(testReports);
+      } catch (apiErr) {
+        console.warn('API failed, using test data:', apiErr.message);
+        
+        // Fallback test data with valid MongoDB ObjectId format
+        const testReports = [
+          {
+            _id: '507f1f77bcf86cd799439011',
+            title: 'Jalan Rusak di Jl. Sudirman',
+            description: 'Ada lubang besar di persilangan Jl. Sudirman',
+            category: 'road',
+            status: 'progress',
+            severity: 4,
+            votes: 15,
+            latitude: -6.2,
+            longitude: 106.8
+          },
+          {
+            _id: '507f1f77bcf86cd799439012',
+            title: 'Lampu Jalan Mati',
+            description: 'Lampu jalan tidak menyala di area Blok M',
+            category: 'street-light',
+            status: 'pending',
+            severity: 2,
+            votes: 8,
+            latitude: -6.25,
+            longitude: 106.82
+          }
+        ];
+        setReports(testReports);
+      }
     } catch (err) {
       console.error('Dashboard error:', err);
       setError(err.message);
@@ -118,6 +129,21 @@ export default function Dashboard() {
                 <p className="text-4xl font-bold text-blue-600 dark:text-blue-400 mt-2">{reports.length}</p>
               </div>
               <AlertCircle className="text-blue-600 dark:text-blue-400" size={32} />
+            </div>
+          </div>
+        </div>
+
+        {/* Map Section */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-8">
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">📍 Community Reports Map</h2>
+            <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">Live issues reported in your area - Coming soon!</p>
+          </div>
+          <div className="h-96 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center">
+            <div className="text-center">
+              <MapPin size={48} className="mx-auto text-gray-400 dark:text-gray-600 mb-4" />
+              <p className="text-gray-500 dark:text-gray-400 font-semibold">Interactive map with {reports.length} reports</p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Map feature will display all community issues</p>
             </div>
           </div>
         </div>

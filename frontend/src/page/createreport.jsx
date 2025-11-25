@@ -1,26 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import { api } from "../api/api";
 import { AlertCircle, CheckCircle, Upload, Map } from "lucide-react";
-import L from "leaflet";
-
-// Fix Leaflet marker icons
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
-  iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
-  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png"
-});
-
-function LocationMarker({ position, setPosition }) {
-  useMapEvents({
-    click(e) {
-      setPosition([e.latlng.lat, e.latlng.lng]);
-    }
-  });
-  return position === null ? null : <Marker position={position} />;
-}
 
 export default function CreateReport() {
   const [formData, setFormData] = useState({
@@ -33,7 +14,6 @@ export default function CreateReport() {
   });
   const [photo, setPhoto] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [position, setPosition] = useState([-6.2, 106.8]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
@@ -70,8 +50,8 @@ export default function CreateReport() {
       form.append("description", formData.description);
       form.append("category", formData.category);
       form.append("severity", formData.severity);
-      form.append("latitude", position[0]);
-      form.append("longitude", position[1]);
+      form.append("latitude", formData.latitude);
+      form.append("longitude", formData.longitude);
       if (photo) {
         form.append("photo", photo);
       }
@@ -90,63 +70,63 @@ export default function CreateReport() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-white dark:bg-gray-900 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">Report an Issue</h1>
-        <p className="text-gray-600 mb-8">Help improve your community by reporting infrastructure issues</p>
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">Report an Issue</h1>
+        <p className="text-gray-600 dark:text-gray-400 mb-8">Help improve your community by reporting infrastructure issues</p>
 
-        <div className="bg-white rounded-xl shadow-md p-8">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-8">
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex gap-3">
-              <AlertCircle className="text-red-600 flex-shrink-0" size={20} />
-              <p className="text-red-700">{error}</p>
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex gap-3">
+              <AlertCircle className="text-red-600 dark:text-red-400 flex-shrink-0" size={20} />
+              <p className="text-red-700 dark:text-red-400">{error}</p>
             </div>
           )}
 
           {success && (
-            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex gap-3">
-              <CheckCircle className="text-green-600 flex-shrink-0" size={20} />
-              <p className="text-green-700">{success}</p>
+            <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex gap-3">
+              <CheckCircle className="text-green-600 dark:text-green-400 flex-shrink-0" size={20} />
+              <p className="text-green-700 dark:text-green-400">{success}</p>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Title */}
             <div>
-              <label className="block text-gray-700 font-semibold mb-2">Title *</label>
+              <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Title *</label>
               <input
                 type="text"
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
                 placeholder="e.g., Jalan berlubang di Jalan Utama"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/30"
                 required
               />
             </div>
 
             {/* Description */}
             <div>
-              <label className="block text-gray-700 font-semibold mb-2">Description *</label>
+              <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Description *</label>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
                 placeholder="Describe the issue in detail..."
                 rows="4"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/30"
                 required
               />
             </div>
 
             {/* Category */}
             <div>
-              <label className="block text-gray-700 font-semibold mb-2">Category *</label>
+              <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Category *</label>
               <select
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/30"
               >
                 <option value="jalan">Jalan Rusak</option>
                 <option value="lampu">Lampu Jalan</option>
@@ -158,7 +138,7 @@ export default function CreateReport() {
 
             {/* Severity */}
             <div>
-              <label className="block text-gray-700 font-semibold mb-2">Severity Level (1-5) *</label>
+              <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Severity Level (1-5) *</label>
               <input
                 type="range"
                 name="severity"
@@ -169,18 +149,18 @@ export default function CreateReport() {
                 className="w-full"
               />
               <div className="text-center mt-2">
-                <span className="text-lg font-bold text-indigo-600">{formData.severity}</span>
+                <span className="text-lg font-bold text-indigo-600 dark:text-indigo-400">{formData.severity}</span>
               </div>
             </div>
 
             {/* Photo Upload */}
             <div>
-              <label className="block text-gray-700 font-semibold mb-2">Photo</label>
-              <label className="flex items-center justify-center w-full px-4 py-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-600 cursor-pointer transition">
+              <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Photo</label>
+              <label className="flex items-center justify-center w-full px-4 py-6 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-indigo-600 dark:hover:border-indigo-500 cursor-pointer transition bg-white dark:bg-gray-700">
                 <div className="text-center">
-                  <Upload className="mx-auto text-gray-400 mb-2" size={32} />
-                  <p className="text-gray-600">Click to upload or drag and drop</p>
-                  <p className="text-gray-500 text-sm">PNG, JPG, GIF up to 10MB</p>
+                  <Upload className="mx-auto text-gray-400 dark:text-gray-500 mb-2" size={32} />
+                  <p className="text-gray-600 dark:text-gray-400">Click to upload or drag and drop</p>
+                  <p className="text-gray-500 dark:text-gray-500 text-sm">PNG, JPG, GIF up to 10MB</p>
                 </div>
                 <input
                   type="file"
@@ -197,24 +177,40 @@ export default function CreateReport() {
             </div>
 
             {/* Location Map */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2 flex items-center gap-2">
-                <Map size={20} /> Location *
-              </label>
-              <div className="h-96 rounded-lg overflow-hidden border border-gray-300">
-                <MapContainer
-                  center={position}
-                  zoom={13}
-                  style={{ height: "100%", width: "100%" }}
-                >
-                  <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; OpenStreetMap contributors'
-                  />
-                  <LocationMarker position={position} setPosition={setPosition} />
-                </MapContainer>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Latitude</label>
+                <input
+                  type="number"
+                  name="latitude"
+                  value={formData.latitude}
+                  onChange={(e) => setFormData({...formData, latitude: parseFloat(e.target.value)})}
+                  placeholder="-6.2"
+                  step="0.0001"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/30"
+                  required
+                />
               </div>
-              <p className="text-gray-600 text-sm mt-2">Click on the map to set location</p>
+              <div>
+                <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Longitude</label>
+                <input
+                  type="number"
+                  name="longitude"
+                  value={formData.longitude}
+                  onChange={(e) => setFormData({...formData, longitude: parseFloat(e.target.value)})}
+                  placeholder="106.8"
+                  step="0.0001"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/30"
+                  required
+                />
+              </div>
+            </div>
+            <div className="h-48 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+              <div className="text-center">
+                <Map size={32} className="mx-auto text-gray-400 dark:text-gray-600 mb-2" />
+                <p className="text-gray-500 dark:text-gray-400">📍 Default location: Jakarta (-6.2, 106.8)</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Update coordinates above to set custom location</p>
+              </div>
             </div>
 
             {/* Submit Button */}
@@ -229,7 +225,7 @@ export default function CreateReport() {
               <button
                 type="button"
                 onClick={() => navigate("/dashboard")}
-                className="flex-1 py-3 bg-gray-200 text-gray-900 font-bold rounded-lg hover:bg-gray-300 transition"
+                className="flex-1 py-3 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white font-bold rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition"
               >
                 Cancel
               </button>
