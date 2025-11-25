@@ -23,6 +23,7 @@ export default function Login({ onLogin }) {
       localStorage.setItem("token", token);
       localStorage.setItem("userRole", user.role);
       localStorage.setItem("userName", user.name || "User");
+      localStorage.setItem("userId", user.id);
       
       onLogin(token, user.role);
       navigate("/dashboard");

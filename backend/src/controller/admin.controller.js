@@ -150,3 +150,37 @@ export const getReportsByArea = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
+
+export const updateUserProfile = async (req, res) => {
+  try {
+    const userId = req.params.id || req.user.id;
+    const { name, bio } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ msg: "User not found" });
+
+    // Update fields
+    if (name) user.name = name;
+    if (bio !== undefined) user.bio = bio;
+
+    // Handle file upload for profile photo
+    if (req.file) {
+      user.profile_photo = req.file.filename;
+    }
+
+    await user.save();
+
+    res.json({
+      msg: "Profil berhasil diperbarui",
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        profile_photo: user.profile_photo,
+        bio: user.bio
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};

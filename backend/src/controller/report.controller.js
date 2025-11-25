@@ -18,7 +18,7 @@ export const createReport = async (req, res) => {
       severity,
       latitude,
       longitude,
-      photo_url: req.file?.path || null,
+      photo_url: req.file?.filename || null,
       priority_score: severity * 3
     });
 
@@ -164,6 +164,79 @@ export const getReportHistory = async (req, res) => {
       .sort({ createdAt: -1 });
 
     res.json(history);
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+
+export const deleteReport = async (req, res) => {
+  try {
+    const reportId = req.params.id;
+    const userId = req.user.id;
+
+    // Find report
+    const report = await Report.findById(reportId);
+    if (!report) return res.status(404).json({ msg: "Report tidak ditemukan" });
+
+    // Check if user is owner or admin
+    const user = await User.findById(userId);
+    if (report.user_id.toString() !== userId.toString() && user.role !== "admin") {
+      return res.status(403).json({ msg: "Anda tidak memiliki izin untuk menghapus laporan ini" });
+    }
+
+    // Delete associated votes
+    await Vote.deleteMany({ report_id: reportId });
+
+    // Delete associated history
+    await ReportHistory.deleteMany({ report_id: reportId });
+
+    // Delete the report
+    await Report.findByIdAndDelete(reportId);
+
+    // Decrement user reports_created count
+    const reportOwner = await User.findById(report.user_id);
+    if (reportOwner) {
+      reportOwner.reports_created = Math.max(0, (reportOwner.reports_created || 1) - 1);
+      await reportOwner.save();
+    }
+
+    res.json({ msg: "Laporan berhasil dihapus" });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+
+export const updateReport = async (req, res) => {
+  try {
+    const reportId = req.params.id;
+    const userId = req.user.id;
+    const { title, description, category, severity } = req.body;
+
+    // Find report
+    const report = await Report.findById(reportId);
+    if (!report) return res.status(404).json({ msg: "Report tidak ditemukan" });
+
+    // Check if user is owner or admin
+    const user = await User.findById(userId);
+    if (report.user_id.toString() !== userId.toString() && user.role !== "admin") {
+      return res.status(403).json({ msg: "Anda tidak memiliki izin untuk mengubah laporan ini" });
+    }
+
+    // Update fields
+    if (title) report.title = title;
+    if (description) report.description = description;
+    if (category) report.category = category;
+    if (severity) {
+      report.severity = severity;
+      report.priority_score = severity * 3;
+    }
+
+    await report.save();
+
+    // Recalculate priority
+    await recalcPriority(reportId);
+
+    res.json(report);
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }

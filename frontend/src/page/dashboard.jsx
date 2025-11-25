@@ -86,7 +86,7 @@ export default function Dashboard() {
         {/* Header with Greeting */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-            Welcome back, <span className="text-indigo-600">{userName}</span>! 👋
+            Welcome back, <span className="text-indigo-600">{userName}</span>!
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-2">Here's what's happening in your community</p>
         </div>

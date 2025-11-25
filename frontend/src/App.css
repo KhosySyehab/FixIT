@@ -1,1 +1,298 @@
 /* Empty - using Tailwind CSS for styling */
+
+/* ==================== CUSTOM CURSOR - KITTEN ==================== */
+:root {
+  --cursor-size: 24px;
+}
+
+/* Kitten face cursor from local SVG file */
+body {
+  cursor: url('/cursor-kitten.svg') 16 6, auto;
+}
+
+body.dark {
+  cursor: url('/cursor-kitten.svg') 16 6, auto;
+}
+
+a, button, [role="button"], .cursor-pointer {
+  cursor: url('/cursor-kitten.svg') 16 6, pointer;
+}
+
+body.dark a, body.dark button, body.dark [role="button"] {
+  cursor: url('/cursor-kitten.svg') 16 6, pointer;
+}
+
+/* ==================== ANIMATIONS ==================== */
+
+@keyframes smoothFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes smoothSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes smoothScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes floatUp {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(99, 102, 241, 0.6);
+  }
+}
+
+/* ==================== GAMIFICATION EFFECTS ==================== */
+
+/* Achievement popup animation */
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotateZ(-45deg);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotateZ(0deg);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(400px);
+  }
+}
+
+/* Reward particle animation */
+@keyframes particleFloat {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) scale(0);
+  }
+}
+
+/* Points burst animation */
+@keyframes pointsBurst {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+/* Level up shine effect */
+@keyframes shine {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 20px rgba(79, 70, 229, 0);
+  }
+}
+
+@keyframes badge-bounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2) rotateZ(5deg);
+  }
+}
+
+@keyframes ribbon-wave {
+  0%, 100% {
+    transform: rotateZ(-2deg);
+  }
+  50% {
+    transform: rotateZ(2deg);
+  }
+}
+
+/* Global smooth transitions */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Dark mode scrollbar */
+.dark::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+.dark::-webkit-scrollbar-thumb {
+  background: #4b5563;
+}
+
+.dark::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Animation utilities */
+.animate-fadeIn {
+  animation: smoothFadeIn 0.3s ease-out;
+}
+
+.animate-popIn {
+  animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.animate-slideOutRight {
+  animation: slideOutRight 0.5s ease-in-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+.animate-badge-bounce {
+  animation: badge-bounce 0.6s ease-in-out;
+}
+
+.animate-shine {
+  animation: shine 3s infinite linear;
+}
+
+.animate-ribbon-wave {
+  animation: ribbon-wave 2s ease-in-out infinite;
+}
+
+/* Gradient backgrounds for gamification */
+.gradient-gold {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+}
+
+.gradient-silver {
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+}
+
+.gradient-bronze {
+  background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+}
+
+.gradient-purple-glow {
+  background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+}
+
+/* Glass morphism effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass-effect {
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Hover scale effect for interactive elements */
+.hover-scale {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Badge glow effect */
+.badge-glow {
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+  animation: pulse-glow 2s infinite;
+}
+
+.animate-slideIn {
+  animation: smoothSlideIn 0.3s ease-out;
+}
+
+.animate-scaleIn {
+  animation: smoothScaleIn 0.3s ease-out;
+}
+
+.animate-float {
+  animation: floatUp 3s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}

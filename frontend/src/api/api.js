@@ -25,7 +25,9 @@ export const reportAPI = {
   getHistory: (id) => api.get(`/report/${id}/history`),
   getByArea: (lat, lon, radius) => api.get("/admin/reports/area", {
     params: { latitude: lat, longitude: lon, radius }
-  })
+  }),
+  delete: (id) => api.delete(`/report/${id}`),
+  update: (id, data) => api.put(`/report/${id}`, data)
 };
 
 export const authAPI = {
@@ -39,7 +41,10 @@ export const adminAPI = {
     params: { limit }
   }),
   getUserProfile: (id) => api.get(`/admin/users/${id}`),
-  getAllUsers: () => api.get("/admin/users-list")
+  getAllUsers: () => api.get("/admin/users-list"),
+  updateUserProfile: (id, formData) => api.post(`/admin/users/${id}/update`, formData, {
+    headers: { "Content-Type": "multipart/form-data" }
+  })
 };
 
 export const userAPI = {
