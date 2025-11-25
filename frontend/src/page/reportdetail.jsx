@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { reportAPI } from '../api/api';
+import SafeMap from '../component/SafeMap';
 import { MapPin, Clock, User, Award, ArrowLeft } from 'lucide-react';
 
 export default function ReportDetail() {
@@ -153,12 +154,12 @@ export default function ReportDetail() {
                     </p>
                   </div>
                 </div>
-                <div className="h-64 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                  <div className="text-center">
-                    <MapPin size={32} className="mx-auto text-gray-400 dark:text-gray-600 mb-2" />
-                    <p className="text-gray-500 dark:text-gray-400">📍 Map view coming soon</p>
-                  </div>
-                </div>
+                <SafeMap
+                  reports={[report]}
+                  center={[report.latitude, report.longitude]}
+                  zoom={15}
+                  height="h-64"
+                />
               </div>
 
               {/* History */}

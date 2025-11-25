@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api/api";
-import { AlertCircle, CheckCircle, Upload, Map } from "lucide-react";
+import SafeMap from "../component/SafeMap";
+import { AlertCircle, CheckCircle, Upload } from "lucide-react";
 
 export default function CreateReport() {
   const [formData, setFormData] = useState({
@@ -177,39 +178,26 @@ export default function CreateReport() {
             </div>
 
             {/* Location Map */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Latitude</label>
-                <input
-                  type="number"
-                  name="latitude"
-                  value={formData.latitude}
-                  onChange={(e) => setFormData({...formData, latitude: parseFloat(e.target.value)})}
-                  placeholder="-6.2"
-                  step="0.0001"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/30"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Longitude</label>
-                <input
-                  type="number"
-                  name="longitude"
-                  value={formData.longitude}
-                  onChange={(e) => setFormData({...formData, longitude: parseFloat(e.target.value)})}
-                  placeholder="106.8"
-                  step="0.0001"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/30"
-                  required
-                />
-              </div>
-            </div>
-            <div className="h-48 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-              <div className="text-center">
-                <Map size={32} className="mx-auto text-gray-400 dark:text-gray-600 mb-2" />
-                <p className="text-gray-500 dark:text-gray-400">📍 Default location: Jakarta (-6.2, 106.8)</p>
-                <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Update coordinates above to set custom location</p>
+            <div>
+              <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">📍 Pick Location on Map *</label>
+              <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">Click on the map to set the report location</p>
+              <SafeMap
+                center={[formData.latitude, formData.longitude]}
+                zoom={13}
+                height="h-96"
+                onMapClick={(coords) => {
+                  setFormData({
+                    ...formData,
+                    latitude: coords[0],
+                    longitude: coords[1]
+                  });
+                }}
+                showClickMarker={true}
+              />
+              <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                <p className="text-blue-900 dark:text-blue-300 text-sm">
+                  <strong>Current Location:</strong> {formData.latitude.toFixed(6)}, {formData.longitude.toFixed(6)}
+                </p>
               </div>
             </div>
 
