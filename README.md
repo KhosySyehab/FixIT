@@ -3,9 +3,9 @@
 ## FixIT — Web Aplikasi Pelaporan & Tracking Perbaikan Fasilitas Publik
 
 ### Deskripsi Singkat
-FixItUp adalah aplikasi berbasis web yang membantu masyarakat melaporkan kerusakan fasilitas publik (jalan rusak, lampu jalan mati, saluran air tersumbat, sampah menumpuk, dll) disertai foto, lokasi, dan tingkat keparahan.          
+FixIT adalah aplikasi berbasis web yang membantu masyarakat melaporkan kerusakan fasilitas publik (jalan rusak, lampu jalan mati, saluran air tersumbat, sampah menumpuk, dll) disertai foto, lokasi, dan tingkat keparahan.          
 Aplikasi ini memprioritaskan laporan secara otomatis, menampilkan peta interaktif, serta memungkinkan pengurus wilayah (RT/RW/kecamatan) memperbarui status laporan.
-FixItUp juga menggunakan sistem gamifikasi untuk meningkatkan partisipasi warga.
+FixIT juga menggunakan sistem gamifikasi untuk meningkatkan partisipasi warga.
 
 ---
 ### Tujuan Utama
