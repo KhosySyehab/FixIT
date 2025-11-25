@@ -2,12 +2,34 @@
 
 ## FixIT — Web Aplikasi Pelaporan & Tracking Perbaikan Fasilitas Publik
 
+> **Version 1.0 Beta** | Last Updated: November 26, 2025
+
 ### Deskripsi Singkat
 FixIT adalah aplikasi berbasis web yang membantu masyarakat melaporkan kerusakan fasilitas publik (jalan rusak, lampu jalan mati, saluran air tersumbat, sampah menumpuk, dll) disertai foto, lokasi, dan tingkat keparahan.          
 Aplikasi ini memprioritaskan laporan secara otomatis, menampilkan peta interaktif, serta memungkinkan pengurus wilayah (RT/RW/kecamatan) memperbarui status laporan.
 FixIT juga menggunakan sistem gamifikasi untuk meningkatkan partisipasi warga.
 
 ---
+
+## ✨ Status Implementasi
+
+| Fitur | Status | Detail |
+|-------|--------|--------|
+| **Authentication (JWT)** | ✅ Done | Register, Login dengan password hashing |
+| **Report Creation** | ✅ Done | Dengan foto upload & lokasi GPS |
+| **Priority System** | ✅ Done | Automatic calculation dari votes + severity |
+| **Voting System** | ✅ Done | User dapat vote untuk prioritas laporan |
+| **Status Tracking** | ✅ Done | Pending → Progress → Done dengan history |
+| **Peta Interaktif** | ✅ Done | Leaflet map dengan color-coded markers |
+| **Dashboard Admin** | ✅ Done | Stats, charts, leaderboard |
+| **Gamification System** | ✅ Done | Points, Levels (1-5), Badges, Leaderboard |
+| **Email Notification** | ✅ Done | Notifikasi status change via email |
+| **Report History** | ✅ Done | Tracking perubahan status & siapa yang mengubah |
+| **User Profiles** | ✅ Done | Dengan level, points, dan badges |
+| **Geographic Filtering** | ✅ Done | Query reports by area |
+
+---
+
 ### Tujuan Utama
 - Mempermudah warga melaporkan masalah lingkungan sekitar   
 - Meningkatkan transparansi proses perbaikan    

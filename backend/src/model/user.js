@@ -5,7 +5,12 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   password: String,
   points: { type: Number, default: 0 },
-  badges: { type: Array, default: [] }
-});
+  level: { type: Number, default: 1 },
+  badges: { type: Array, default: [] },
+  role: { type: String, default: "user" },
+  reports_created: { type: Number, default: 0 },
+  reports_verified: { type: Number, default: 0 },
+  createdAt: { type: Date, default: Date.now }
+}, { timestamps: true });
 
 export default mongoose.model("User", userSchema);
