@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { adminAPI } from '../api/api';
+import { adminAPI } from '../../api/api';
 import { BarChart3, TrendingUp, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 
 export default function Dashboard() {

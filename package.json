@@ -1,0 +1,7 @@
+{
+  "type": "module",
+  "name": "fixit",
+  "version": "1.0.0",
+  "description": "FixIT - Web Application for Public Facility Issue Reporting",
+  "private": true
+}

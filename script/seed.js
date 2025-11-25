@@ -1,9 +1,6 @@
 import dotenv from "dotenv";
-import mongoose from "mongoose";
+import { MongoClient } from "mongodb";
 import bcrypt from "bcryptjs";
-import User from "../backend/src/model/user.js";
-import Report from "../backend/src/model/report.js";
-import Vote from "../backend/src/model/vote.js";
 
 dotenv.config({ path: "./backend/.env" });
 
@@ -53,24 +50,24 @@ const sampleReports = [
 ];
 
 const run = async () => {
-  try {
-    await mongoose.connect(MONGO, { serverSelectionTimeoutMS: 5000 });
-    console.log("✓ Connected to MongoDB for seeding");
-  } catch (connErr) {
-    console.error("✗ Failed to connect to MongoDB:", connErr.message || connErr);
-    process.exit(1);
-  }
+  const client = new MongoClient(MONGO);
 
   try {
+    await client.connect();
+    console.log("✓ Connected to MongoDB");
+
+    const db = client.db("fixit");
+
     // Clear existing data
     console.log("🗑️  Clearing existing data...");
-    await User.deleteMany({});
-    await Report.deleteMany({});
-    await Vote.deleteMany({});
+    await db.collection("users").deleteMany({});
+    await db.collection("reports").deleteMany({});
+    await db.collection("votes").deleteMany({});
+    console.log("✓ Data cleared");
 
     // Create admin user
     const adminHashed = await bcrypt.hash("adminpass", 10);
-    const admin = await User.create({
+    const adminResult = await db.collection("users").insertOne({
       name: "Admin FixIT",
       email: "admin@fixit.com",
       password: adminHashed,
@@ -79,7 +76,9 @@ const run = async () => {
       level: 5,
       reports_created: 10,
       reports_verified: 20,
-      badges: ["Warga Peduli Lingkungan", "Mata Elang", "Green Guardian", "FixIt Ranger"]
+      badges: ["Warga Peduli Lingkungan", "Mata Elang", "Green Guardian", "FixIt Ranger"],
+      createdAt: new Date(),
+      updatedAt: new Date()
     });
     console.log("✓ Created admin user");
 
@@ -88,7 +87,7 @@ const run = async () => {
     const users = [];
 
     for (let i = 1; i <= 5; i++) {
-      const user = await User.create({
+      const userResult = await db.collection("users").insertOne({
         name: `User ${i}`,
         email: `user${i}@fixit.com`,
         password: userHashed,
@@ -96,43 +95,52 @@ const run = async () => {
         points: Math.floor(Math.random() * 300),
         level: Math.floor(Math.random() * 4) + 1,
         reports_created: Math.floor(Math.random() * 10),
-        reports_verified: Math.floor(Math.random() * 15)
+        reports_verified: Math.floor(Math.random() * 15),
+        badges: [],
+        createdAt: new Date(),
+        updatedAt: new Date()
       });
-      users.push(user);
+      users.push(userResult.insertedId);
     }
-    console.log(`✓ Created ${users.length} regular users`);
+    console.log(`✓ Created 5 regular users`);
 
     // Create sample reports
-    const createdReports = [];
+    const adminId = adminResult.insertedId;
     for (let i = 0; i < sampleReports.length; i++) {
       const reportData = sampleReports[i];
-      const randomUser = users[Math.floor(Math.random() * users.length)];
+      const randomUserId = users[Math.floor(Math.random() * users.length)];
 
-      const report = await Report.create({
-        user_id: randomUser._id,
+      const reportResult = await db.collection("reports").insertOne({
+        user_id: randomUserId,
         ...reportData,
         status: ["pending", "progress", "done"][Math.floor(Math.random() * 3)],
-        priority_score: reportData.severity * 3 + Math.floor(Math.random() * 10)
+        priority_score: reportData.severity * 3 + Math.floor(Math.random() * 10),
+        createdAt: new Date(),
+        updatedAt: new Date()
       });
 
       // Add random votes
       const voteCount = Math.floor(Math.random() * 5);
       for (let v = 0; v < voteCount; v++) {
-        const voter = users[Math.floor(Math.random() * users.length)];
+        const voterUserId = users[Math.floor(Math.random() * users.length)];
         try {
-          await Vote.create({
-            report_id: report._id,
-            user_id: voter._id,
-            value: 1
+          await db.collection("votes").insertOne({
+            report_id: reportResult.insertedId,
+            user_id: voterUserId,
+            value: 1,
+            createdAt: new Date()
           });
         } catch (err) {
           // Ignore duplicate votes
         }
       }
-
-      createdReports.push(report);
     }
-    console.log(`✓ Created ${createdReports.length} sample reports with votes`);
+    console.log(`✓ Created 5 sample reports with votes`);
+
+    // Create indexes
+    await db.collection("users").createIndex({ email: 1 }, { unique: true });
+    await db.collection("reports").createIndex({ user_id: 1 });
+    console.log("✓ Created indexes");
 
     console.log("\n✅ Seeding complete!\n");
     console.log("Admin credentials:");
@@ -147,12 +155,11 @@ const run = async () => {
 
     process.exit(0);
   } catch (err) {
-    console.error("✗ Seeding error:", err);
+    console.error("✗ Seeding error:", err.message);
     process.exit(1);
+  } finally {
+    await client.close();
   }
 };
 
-run().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+run();

@@ -9,8 +9,7 @@ const userSchema = new mongoose.Schema({
   badges: { type: Array, default: [] },
   role: { type: String, default: "user" },
   reports_created: { type: Number, default: 0 },
-  reports_verified: { type: Number, default: 0 },
-  createdAt: { type: Date, default: Date.now }
+  reports_verified: { type: Number, default: 0 }
 }, { timestamps: true });
 
 export default mongoose.model("User", userSchema);
